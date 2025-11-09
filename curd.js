@@ -155,45 +155,19 @@ function funChk(argId) {
     }
 }
 
-// function funSave() {
 
-//     var ProductIds = $('.clsProdId:checked').map(function () {
-//         return this.value;
-//     }).get();
-
-//     var ajaxparamter = $("#frmFGT").serializeArray();
-//     ajaxparamter.push({name:"Ids",value:ProductIds});
-//     console.log(ajaxparamter);
-//     let payload = {};
-
-//     // Convert serialized array to a JSON object
-//     ajaxparamter.forEach(function (field) {
-//         payload[field.name] = field.value;
-//     });
-   
-//     $.ajax({
-//         url: 'http://localhost:8081/saveDetails',
-//         method: 'POST',
-//         contentType: 'application/json',
-//         data: JSON.stringify(payload),
-//         success: function (response) {
-//             if (response.status == "success") {
-//                 alert(response.message);  // or you can use any other method to show the message
-//             } else {
-//                 alert('Error: ' + response.message);
-//             }
-//         },
-//         error: function (xhr, status, error) {
-//             // Handle errors from the AJAX request
-//             alert('Request failed: ' + error);
-//         }
-//     });
-
-// }
 
 
 
 function funSave() {
+
+    const selectedOffice = $('#txtRequestReceivingOffice').val();
+    alert(selectedOffice)
+    return false;
+    // if (selectedOffice == "0") {
+     
+    // }
+
     let products = [];
     $('.clsProdId:checked').each(function() {
         let pid = $(this).val();
@@ -214,8 +188,8 @@ function funSave() {
         products: products
     };
 
-    alert(JSON.stringify(payload))
-    console.log("payload --> ", JSON.stringify(payload, null, 2));
+    // alert(JSON.stringify(payload))
+    // console.log("payload --> ", JSON.stringify(payload, null, 2));
 
 
     $.ajax({
@@ -232,6 +206,9 @@ function funSave() {
     });
 }
 
+function funRefresh(){
+    window.location.reload();
+}
 
 // });
 

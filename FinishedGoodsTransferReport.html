@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script> -->
+    <script src="transfereport.js"></script>
+</head>
+
+<body>
+    <form id="frmRequest" name="frmRequest" onsubmit="return false;">
+    <table id="tblTransferHeader" class="table">
+        <thead>
+            <tr>
+                <td colspan="7" class="text-center"><b>Finished Goods Transfer Report</b></td>
+            </tr>
+            <tr>
+                <td>From Date</td>
+                <td><input type="text" id="txtFromDate" name="txtFromDate" class="datepicker form-control"></td>
+                <td>To Date</td>
+                <td colspan="4"><input type="text" id="txtToDate" name="txtToDate" class="datepicker form-control"></td>
+            </tr>
+            <tr>
+                <td colspan="4" align="center">
+                    <button type="button" class="btn btn-primary" onclick="funIssuingDetails()">Generate</button>
+                    <button type="button" class="btn btn-primary" onclick="funProdDetails()" >Details</button>
+                    <button type="reset" class="btn btn-secondary">Refresh</button>
+                    
+                </td>
+            </tr>
+            <tr id='tblGen' style="display: none;">
+                <th>S.No</th>
+                <!-- <th>Request ID</th> -->
+                <th>Request Date</th>
+                <th>Issuing Office</th>
+                <th>Transfer To Office</th>
+                <th>Remarks</th>
+                <th>Status</th>
+            </tr>
+            <tr id="tblDetail" style="display: none;">
+                <th>S.No</th>
+                <th>Transfer Date</th>
+                <th>Product</th>
+                <th>Transfered Quantity</th>
+                <th>Price Per Unit</th>
+                <th>Total</th>
+                <!-- <th>Remarks</th>
+                <th></th>
+                <th></th> -->
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</form>
+</body>
+</html>

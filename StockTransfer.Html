@@ -47,15 +47,19 @@
             <tbody>
                 <tr>
                     <td>Transferring Date</td>
-                    <td colspan="4"><input type="text" class="form-control" id="txtReqDate" name="txtReqDate" readonly></td>
+                    <td colspan="4"><input type="text" class="form-control" id="txtReqDate" name="txtReqDate" readonly>
+                    </td>
                 </tr>
                 <tr>
                     <td>Issuing Office</td>
-                    <td colspan="4"><input type="text" class="form-control" id="txtIssuingOfz" name="txtIssuingOfz" readonly></td>
+                    <td colspan="4"><input type="text" class="form-control" id="txtIssuingOfz" name="txtIssuingOfz" readonly>
+                    <input type="hidden" id="hdnIssuingOfzId" name="hdnIssuingOfzId"></td>
                 </tr>
                 <tr>
                     <td>Transfering To</td>
-                    <td colspan="4"><input type="text" class="form-control" id="txtTransferToOfz" name="txtTransferToOfz" readonly></td>
+                    <td colspan="4">
+                        <input type="text" class="form-control" id="txtTransferToOfz" name="txtTransferToOfz" readonly>
+                    <input type="hidden" id="hdnTransferingOfzId" name="hdnTransferingOfzId" ></td>
                 </tr>
                 <tr>
                     <td>Remarks</td>
@@ -69,6 +73,7 @@
                     <td>Received Quantity</td>
                     <td>Balance Quantity</td>
                     <td>Transfering Quantity</td>
+                    <td>Price Per Unit</td>
                     <td>Total</td>
                 </tr>
             </tbody>

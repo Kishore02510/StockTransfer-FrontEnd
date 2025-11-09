@@ -22,16 +22,18 @@ $(document).ready(function () {
 function funIssuingDetails() {
     var i = 0;
     $.ajax({
-        url: 'http://localhost:8081/requestdetails', // Spring Boot endpoint
+        url: 'http://localhost:8081/requestdetails', 
         type: 'GET',
         success: function (response) {
 
             $.each(response, function (index, IssuingDetails) {
                 i++;
-                $('#tblIssuingDetails').append("<tr onclick='funLoadReqDetails()'><td class='text-class'>" + i + "</td><td class='text-class'>" + IssuingDetails.issuingofz + "</td><td class='text-class'>" + IssuingDetails.transferingToOfz + "</td><td>" +
-                    IssuingDetails.transactiondatetime + "</td><td class='text-class'>" + IssuingDetails.remarks + "</td></tr>");
-                $("#hdnFGTRId").val(IssuingDetails.finishedgoodstransferrequestid);
+                $('#tblIssuingDetails').append("<tr onclick='funLoadReqDetails("+IssuingDetails.requestId+"," + IssuingDetails.receivingOfficeId + "," + IssuingDetails.requestingOfficeId + ")'><td class='text-class'>" + i + "</td><td class='text-class'>" + IssuingDetails.receivingOfficeName + "</td><td class='text-class'>" + IssuingDetails.requestingOfficeName + "</td><td>" +
+                    IssuingDetails.transactionDateTime + "</td><td class='text-class'>" + IssuingDetails.remarks + "<input type='hidden' id='hdnFGTRId"+ IssuingDetails.requestId+"' name='hdnFGTRId"+IssuingDetails.requestId +"' value='"+IssuingDetails.requestId+"'> </td></tr>");
+                // $("#hdnFGTRId").val(IssuingDetails.requestId);
             });
+            // $("#hdnIssuingOfzId").val(IssuingDetails.receivingOfficeId);
+            // $("#hdnTransferingOfzId").val(IssuingDetails.requestingOfficeId);
         },
         error: function (error) {
             console.log('Error:', error);
@@ -39,16 +41,18 @@ function funIssuingDetails() {
     });
 }
 
-function funLoadReqDetails() {
+function funLoadReqDetails(argFGTRId,argRecOfzId, argReqOfzId) {
 
     $("#tblTransfer").show();
     $("#tblIssuingDetails").hide();
-
+    $("#hdnIssuingOfzId").val(argRecOfzId);
+    $("#hdnTransferingOfzId").val(argReqOfzId);
     var ajaxparamter = $("#frmFGT").serializeArray();
+    // alert(argFGTRId)
     // console.log(ajaxparamter);
     // let payload = {}
     $.ajax({
-        url: 'http://localhost:8081/products/' + $("#hdnFGTRId").val(),
+        url: 'http://localhost:8081/products/' + argFGTRId,
         type: 'GET',
         success: function (response) {
             $.each(response, function (index, IssuingDetails) {
@@ -56,7 +60,7 @@ function funLoadReqDetails() {
                 $("#txtTransferToOfz").val(IssuingDetails.transferingToOfz);
             });
 
-            funLoadReqProdDetails();
+            funLoadReqProdDetails(argFGTRId);
 
         },
         error: function (xhr, status, error) {
@@ -67,22 +71,36 @@ function funLoadReqDetails() {
 
 }
 
-function funLoadReqProdDetails() {
+function funLoadReqProdDetails(argFGTRId) {
     var i = 0;
     var balanceqty = 0;
     var ajaxparamter = $("#frmFGT").serializeArray();
     $.ajax({
-        url: 'http://localhost:8081/productdetails/' + $("#hdnFGTRId").val(),
+        url: 'http://localhost:8081/productdetails/' + argFGTRId,
         type: 'GET',
         success: function (response) {
 
             $.each(response, function (index, ProdDetails) {
                 i++;
-                balanceqty = parseInt(ProdDetails.requestedqty) - parseInt(ProdDetails.receivedqty);
-                $('#tblTransfer').append("<tr><td class='text-class'><input onclick='funChk("+ProdDetails.productid +")' type='checkbox' id='chkProd"+ProdDetails.productid+"'> " + i + "</td><td class='text-class'>" + ProdDetails.productname + "</td><td class='text-class'>" + ProdDetails.requestedqty + "</td><td>" 
-                    + ProdDetails.receivedqty + "</td><td>"+balanceqty+"</td><td class='text-class'><input type='text' disabled id='txtTransQty"+ ProdDetails.productid +"'></td><td><input type='text' id='txtTotal"+ProdDetails.productid+"' ></td></tr>");
-                //$("#hdnFGTRId").val(IssuingDetails.finishedgoodstransferrequestid);
+                let balanceqty = parseInt(ProdDetails.requestedqty) - parseInt(ProdDetails.receivedqty);
+
+                $('#tblTransfer').append(
+                    "<tr>" +
+                    "<td class='text-class'>" +
+                    "<input onclick='funChk(" + ProdDetails.productid + ")' class='clsProdId' type='checkbox' id='chkProd" + ProdDetails.productid + "' value='"+ProdDetails.productid +"'> " + i +
+                    "</td>" +
+                    "<td class='text-class'>" + ProdDetails.productname + "</td>" +
+                    "<td class='text-class' id='tdRequestedQty"+ProdDetails.productid +"'>" + ProdDetails.requestedqty + "</td>" +
+                    "<td class='text-class' id='tdReceivedQty"+ProdDetails.productid+"'>" + ProdDetails.receivedqty + "</td>" +
+                    "<td class='text-class'id='tdBalanceQty"+ProdDetails.productid+"' >" + balanceqty + "</td>" +
+                    "<td class='text-class'><input type='text' disabled oninput='validateQty("+ ProdDetails.productid +");funAmtCalc("+ ProdDetails.productid +")'  id='txtTransQty" + ProdDetails.productid + "'></td>" +
+                    "<td class='text-class'><input type='text' disabled id='txtPrice" + ProdDetails.productid + "' name='txtPrice" + ProdDetails.productid + "' value='"+ProdDetails.amountperunit+"'></td>" +
+                    "<td class='text-class'><input readonly disabled type='text' id='txtTotal" + ProdDetails.productid + "' value=''></td>" +
+                    "<input type='hidden' id='hdnFGTRid' value='"+argFGTRId+"'></tr>"
+                );
             });
+
+            $('#tblTransfer').append("<tr><td colspan=9 class='text-center'><button id='btnSave' onclick='funSave()'>Save</button></td></tr>");
         },
         error: function (xhr, status, error) {
             // Handle errors from the AJAX request
@@ -99,44 +117,75 @@ function funChk(argId) {
     } else {
         $("#txtTransQty" + argId).attr("disabled", true);
         $("#txtTransQty" + argId).val("");
+        // $("#txtPrice" + argId).val("");
+        $("#txtTotal" + argId).val("");
     }
 }
 
 function funSave() {
     let products = [];
-    $('.clsProdId:checked').each(function() {
+    $('.clsProdId:checked').each(function () {
         let pid = $(this).val();
         let qty = parseInt($("#txtTransQty" + pid).val());
-        let price = parseFloat($("#txtprice" + pid).val());
+        let price = parseFloat($("#txtPrice" + pid).val());
         products.push({
+            // issuingofzId:
             productid: pid,
             requestedQuantity: qty,
-            amountperunit: price
+            amountperunit: price,
+            finishedgoodstransferrequestid :$("#hdnFGTRid").val()
         });
     });
 
     let payload = {
-        requestingofficeid: $("#txtRequestingOffice").val(),
-        receivingofficeid: $("#txtRequestReceivingOffice").val(),
+        issuingofzid: $("#hdnIssuingOfzId").val(),
+        transferingofzid: $("#hdnTransferingOfzId").val(),
         remarks: $("#txtRemarks").val(),
         //sendingemployeeid: 1,  example, get from session
         products: products
     };
 
-    alert(JSON.stringify(payload))
-    console.log("payload --> ", JSON.stringify(payload, null, 2));
-
-
+    console.log(products);
+    
     $.ajax({
-        url: 'http://localhost:8081/savereqdetails',
+        url: 'http://localhost:8081/savetransferreqdetails',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(payload),
-        success: function(response) {
+        success: function (response) {
             alert(response.message);
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             alert('Request failed: ' + error);
         }
     });
 }
+
+function funAmtCalc(argProdId) {
+    
+                var ReqQty = $("#txtTransQty" + argProdId).val();
+                var AmtPerUnit = $("#txtPrice" + argProdId).val();
+              
+                var TotAmt = parseFloat(ReqQty) * parseFloat(AmtPerUnit);
+                if (isNaN(TotAmt)) {
+                    TotAmt = "";
+                }
+                if (ReqQty == "") {
+                    $("#txtTotal" + argProdId).val("");
+                }
+                $("#txtTotal" + argProdId).val(TotAmt.toFixed(2));
+            }
+
+            function validateQty(argProdId) {
+                alert($("#tdReceivedQty"+argProdId).html());
+                alert($("#tdBalanceQty"+argProdId).html());
+                alert($("#tdRequestedQty"+argProdId).html())
+                var quantity = (parseFloat($("#tdBalanceQty"+argProdId).html()) > 0.00) ? $("#tdBalanceQty"+argProdId).html() : $("#tdRequestedQty" + argProdId).html();
+                var msg = (parseFloat($("#tdReceivedQty"+argProdId).html()) > 0.00) ? "Balance" : "Requested";
+                if (parseFloat($("#txtTransQty" + argProdId).val()) > parseFloat(quantity)) {
+                    alert("Transfer quantity must be less than "+msg+" Quantity...");
+                    $("#txtTransQty" + argProdId).focus();
+                    $("#txtTransQty" + argProdId).val("");
+                    return false;
+                }
+            }
