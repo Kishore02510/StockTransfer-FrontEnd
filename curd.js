@@ -161,13 +161,6 @@ function funChk(argId) {
 
 function funSave() {
 
-    const selectedOffice = $('#txtRequestReceivingOffice').val();
-    alert(selectedOffice)
-    return false;
-    // if (selectedOffice == "0") {
-     
-    // }
-
     let products = [];
     $('.clsProdId:checked').each(function() {
         let pid = $(this).val();
@@ -199,6 +192,7 @@ function funSave() {
         data: JSON.stringify(payload),
         success: function(response) {
             alert(response.message);
+            funRefresh();
         },
         error: function(xhr, status, error) {
             alert('Request failed: ' + error);

@@ -68,7 +68,7 @@ function funIssuingDetails() {
                 tbody.append(
                     `<tr>
                         <td>${index + 1}</td>
-                      
+                        <td>${transfer.finishedgoodstransferrefno || '-'}</td>
                         <td>${transfer.transactionDate || '-'}</td>
                         <td>${transfer.issuingOffice || '-'}</td>
                         <td>${transfer.transferingOffice || '-'}</td>

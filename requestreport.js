@@ -40,8 +40,8 @@ function funIssuingDetails() {
     $("#tblDetail").hide();
     const fromDate = $("#txtFromDate").val();
     const toDate = $("#txtToDate").val();
-    alert(fromDate)
-    alert(toDate)
+    // alert(fromDate)
+    // alert(toDate)
     if (!fromDate || !toDate) {
         alert("Please select both From Date and To Date.");
         return;
@@ -68,7 +68,7 @@ function funIssuingDetails() {
                 tbody.append(
                     `<tr>
                         <td>${index + 1}</td>
-                      
+                        <td>${transfer.finishedgoodstransferrequestrefno}</td>
                         <td>${transfer.requestDate || '-'}</td>
                         <td>${transfer.requestingOffice || '-'}</td>
                         <td>${transfer.receivingOffice || '-'}</td>
