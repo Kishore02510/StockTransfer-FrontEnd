@@ -119,6 +119,8 @@ function funProdDetails() {
                 tbody.append(
                     `<tr>
                         <td>${index + 1}</td>
+                        <td>${transfer.finishedgoodstransferrequestrefno}</td>
+                        <td>${transfer.finishedgoodstransferrefno}</td>
                         <td>${transfer.transactionDate}</td>
                         <td>${transfer.productName }</td>
                         <td>${transfer.quantity}</td>
